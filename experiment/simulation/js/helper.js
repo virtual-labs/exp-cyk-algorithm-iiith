@@ -30,12 +30,12 @@ function displayCanvas(canvas, cnf, inputIndex, maxStep, stepCounter){
   
   console.log("inside display", stepCounter, maxStep);
 
-  originX = 20;
+  originX = 50;
   originY = 20;
   color = "black";
   stroke_width = "1px";
   fillColor = "#ffe4c4";
-  cellWidth = 80;
+  cellWidth = 70;
   cellHeight = 50;
 
   for(i = 0;i < cnf["input"][inputIndex]["string"].length;++i){
