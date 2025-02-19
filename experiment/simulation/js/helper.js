@@ -3,31 +3,31 @@
  *
  */
 
-function newElementNS(tag, attr){
- elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
- attr.forEach(function(item){
-   elem.setAttribute(item[0], item[1]);
- });
- return elem;
+function newElementNS(tag, attr) {
+  elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  attr.forEach(function (item) {
+    elem.setAttribute(item[0], item[1]);
+  });
+  return elem;
 }
 
-function newElement(tag, attr){
- elem = document.createElement(tag);
- attr.forEach(function(item){
-   elem.setAttribute(item[0], item[1]);
- });
- return elem;
+function newElement(tag, attr) {
+  elem = document.createElement(tag);
+  attr.forEach(function (item) {
+    elem.setAttribute(item[0], item[1]);
+  });
+  return elem;
 }
 
-function clearElem(elem){
-  while(elem.firstChild){
+function clearElem(elem) {
+  while (elem.firstChild) {
     elem.removeChild(elem.lastChild);
   }
 }
 
 // Global variables width, height and radius need to be set before invoking this function
-function displayCanvas(canvas, cnf, inputIndex, maxStep, stepCounter){
-  
+function displayCanvas(canvas, cnf, inputIndex, maxStep, stepCounter) {
+
   console.log("inside display", stepCounter, maxStep);
 
   originX = 50;
@@ -38,17 +38,15 @@ function displayCanvas(canvas, cnf, inputIndex, maxStep, stepCounter){
   cellWidth = 70;
   cellHeight = 50;
 
-  for(i = 0;i < cnf["input"][inputIndex]["string"].length;++i){
-    for(j = 0;j < i+1;++j){
+  for (i = 0; i < cnf["input"][inputIndex]["string"].length; ++i) {
+    for (j = 0; j < i + 1; ++j) {
 
-      // console.log(i, j);
-
-      x = originX + cellWidth*j;
-      y = originY + cellHeight*i;
+      x = originX + cellWidth * j;
+      y = originY + cellHeight * i;
 
       // Display cells
       cell = newElementNS('rect', [
-        ["id", "push_down_stack_item_"+i+"_"+j],
+        ["id", "push_down_stack_item_" + i + "_" + j],
         ["x", x],
         ["y", y],
         ["width", cellWidth],
@@ -61,32 +59,30 @@ function displayCanvas(canvas, cnf, inputIndex, maxStep, stepCounter){
       canvas.appendChild(cell);
 
       // Display row labels
-      if(j == 0){
+      if (j == 0) {
         text = newElementNS('text', [
-          ["id", "row_"+i],
-          ["x", x-15],
-          ["y", y+cellHeight/2],
+          ["id", "row_" + i],
+          ["x", x - 15],
+          ["y", y + cellHeight / 2],
           ["fill", color],
           ["font-weight", "bold"]
         ]);
 
-        text.appendChild(document.createTextNode(i+1));
-
+        text.appendChild(document.createTextNode(i + 1));
         canvas.appendChild(text);
       }
 
       // Display column labels
-      if(j == i){
+      if (j == i) {
         text = newElementNS('text', [
-          ["id", "row_"+i],
-          ["x", x+cellWidth/2],
-          ["y", y-5],
+          ["id", "row_" + i],
+          ["x", x + cellWidth / 2],
+          ["y", y - 5],
           ["fill", color],
           ["font-weight", "bold"]
         ]);
 
         text.appendChild(document.createTextNode(i));
-
         canvas.appendChild(text);
       }
     }
@@ -96,49 +92,34 @@ function displayCanvas(canvas, cnf, inputIndex, maxStep, stepCounter){
   step = 0;
   flag = 0;
 
-  for(i = 0;i<cnf["input"][inputIndex]["string"].length;++i){
-    for(j = 0;j<cnf["input"][inputIndex]["string"].length - i;++j){
-      console.log("here", j+i, j, "matrix", i, j);
-      // Fill cell values only untill current step
-      if(step == stepCounter){
+  for (i = 0; i < cnf["input"][inputIndex]["string"].length; ++i) {
+    for (j = 0; j < cnf["input"][inputIndex]["string"].length - i; ++j) {
+
+      // Fill cell values only until current step
+      if (step == stepCounter) {
         flag = 1;
         break;
       }
       step = step + 1;
 
-      x = originX + cellWidth*j;
-      y = originY + cellHeight*(j+i);
+      x = originX + cellWidth * j;
+      y = originY + cellHeight * (j + i);
 
       text = newElementNS('text', [
-        ["id", "text_"+i+"_"+j],
-        ["x", x+cellWidth/4],
-        ["y", y+cellHeight/2],
+        ["id", "text_" + i + "_" + j],
+        ["x", x + cellWidth / 2],  // Center horizontally
+        ["y", y + cellHeight / 2 + 5],  // Center vertically
         ["fill", color],
-        ["font-weight", "bold"]
+        ["font-weight", "bold"],
+        ["text-anchor", "middle"],  // Center text alignment
+        ["dominant-baseline", "middle"]  // Vertical centering
       ]);
 
-      text.appendChild(document.createTextNode( cnf["input"][inputIndex]["matrix"][j+i][j] ));
-
+      text.appendChild(document.createTextNode(cnf["input"][inputIndex]["matrix"][j + i][j]));
       canvas.appendChild(text);
-
     }
-    if(flag == 1){
+    if (flag == 1) {
       break;
     }
   }
-
-  // for(i = 0;i < cnf["input"][inputIndex]["string"].length;++i){
-  //   for(j = 0;j < i+1;++j){
-  //     // Fill cell values only until current step
-  //     if(step == stepCounter){
-  //       flag = 1;
-  //       break;
-  //     }
-      
-  //   }
-  //   if(flag == 1){
-  //     break;
-  //   }
-  // }
-
 }
