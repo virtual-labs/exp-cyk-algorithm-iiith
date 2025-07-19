@@ -1,17 +1,39 @@
 /****
-  * File containing DFA descriptions
+  * File containing CNF grammar descriptions for CYK algorithm
   *
   */
 
 const cnf1 = {
-  "description": "Given the following CNF, check if given input is accepted or not.",
+  "description": "CNF Grammar 1: Palindromes",
+  "start": "S",
   "transitions": [
-    {"from": "S", "to": ["AB", "BA", "SS", "AC", "BD"]},
-    {"from": "A", "to": ["a"]},
-    {"from": "B", "to": ["b"]},
-    {"from": "C", "to": ["SB"]},
-    {"from": "D", "to": ["SA"]}
-  ],
+    "S → AB | BA | SS | AC | BD",
+    "A → a",
+    "B → b", 
+    "C → SB",
+    "D → SA"
+  ]
+};
+
+const cnf2 = {
+  "description": "CNF Grammar 2: Equal a's and b's",
+  "start": "S",
+  "transitions": [
+    "S → AB | BA | SS",
+    "A → a",
+    "B → b"
+  ]
+};
+
+const cnf3 = {
+  "description": "CNF Grammar 3: Balanced Parentheses",
+  "start": "S", 
+  "transitions": [
+    "S → AB | SS",
+    "A → a",
+    "B → b"
+  ]
+};
   "input": [
     {
       "string": "aabbab",
@@ -61,11 +83,11 @@ const cnf1 = {
 }
 
 const cnf2 = {
-  "description": "Given the following CNF, check if given input is accepted or not.",
+  "description": "CNF Grammar 2: S -> AB | BC, A -> BA | a",
   "transitions": [
     {"from": "S", "to": ["AB", "BC"]},
     {"from": "A", "to": ["BA", "a"]},
-    {"from": "B", "to": ["C", "b"]},
+    {"from": "B", "to": ["CC", "b"]},
     {"from": "C", "to": ["AB", "a"]}
   ],
   "input": [
@@ -105,7 +127,7 @@ const cnf2 = {
 }
 
 const cnf3 = {
-  "description": "Given the following CNF, check if given input is accepted or not.",
+  "description": "CNF Grammar 3: S -> AB, A -> CD | CF",
   "transitions": [
     {"from": "S", "to": ["AB"]},
     {"from": "A", "to": ["CD", "CF"]},
@@ -151,3 +173,9 @@ const cnf3 = {
     }
   ]
 }
+
+// Array of all CNF grammars for easy iteration
+const cnfGrammars = [cnf1, cnf2, cnf3];
+
+// Legacy support for existing code
+const cnf = cnfGrammars;
