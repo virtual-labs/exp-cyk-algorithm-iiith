@@ -1,767 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYK Algorithm Demo</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f8f9fa;
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .main-title {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #2c3e50;
-            font-weight: 300;
-            font-size: 2.2em;
-        }
-
-        .content {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 30px;
-        }
-
-        .sidebar {
-            background: white;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            height: fit-content;
-        }
-
-        .main-area {
-            background: white;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .section-title {
-            font-size: 1.2em;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #2c3e50;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 8px;
-        }
-
-        .input-group {
-            margin-bottom: 18px;
-        }
-
-        label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: #34495e;
-            font-size: 14px;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: border-color 0.2s ease;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
-        }
-
-        button {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background 0.2s ease;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
-
-        button:hover {
-            background: #2980b9;
-        }
-
-        button:disabled {
-            background: #bdc3c7;
-            cursor: not-allowed;
-        }
-
-        .controls {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .table-container {
-            overflow-x: auto;
-            margin: 20px 0;
-        }
-
-        .table-title {
-            font-size: 1.1em;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-
-        .cyk-table {
-            margin: 0 auto;
-            border-collapse: collapse;
-            background: white;
-        }
-
-        .cyk-table td {
-            border: 2px solid #3498db;
-            width: 80px;
-            height: 80px;
-            text-align: center;
-            vertical-align: middle;
-            font-weight: 500;
-            position: relative;
-            background: #fdfdfd;
-            transition: all 0.3s ease;
-            font-size: 13px;
-        }
-
-        .cyk-table td.filled {
-            background: #d5f4e6;
-            color: #27ae60;
-        }
-
-        .cyk-table td.current {
-            background: #fff9c4;
-            border-color: #f39c12;
-            animation: pulse 1s infinite alternate;
-        }
-
-        .cyk-table td.empty {
-            background: #fdeaea;
-        }
-
-        .cyk-table td.diagonal {
-            background: #f8f9fa;
-        }
-
-        @keyframes pulse {
-            from { transform: scale(1); }
-            to { transform: scale(1.05); }
-        }
-
-        .step-info {
-            background: #f8f9fa;
-            border-radius: 6px;
-            padding: 15px;
-            margin: 20px 0;
-            border-left: 3px solid #3498db;
-        }
-
-        .step-info h3 {
-            color: #2c3e50;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .rules-display {
-            background: #f8f9fa;
-            border-radius: 6px;
-            padding: 12px;
-            margin: 15px 0;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 13px;
-            line-height: 1.4;
-            border: 1px solid #e9ecef;
-        }
-
-        .result {
-            text-align: center;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            font-size: 1.1em;
-            font-weight: 500;
-        }
-
-        .result.accepted {
-            background: #d5f4e6;
-            color: #27ae60;
-            border: 1px solid #c3e6cb;
-        }
-
-        .result.rejected {
-            background: #fdeaea;
-            color: #e74c3c;
-            border: 1px solid #f5c6cb;
-        }
-
-        .coordinates {
-            position: absolute;
-            top: 2px;
-            left: 3px;
-            font-size: 9px;
-            color: #7f8c8d;
-        }
-
-        .cnf-note {
-            background: #e8f4fd;
-            border: 1px solid #bee5eb;
-            border-radius: 4px;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 13px;
-            color: #0c5460;
-        }
-
-        .alphabet-display {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            padding: 8px;
-            margin: 8px 0;
-            font-family: monospace;
-            font-size: 13px;
-            color: #5a6c7d;
-        }
-
-        .input-row {
-            display: flex;
-            gap: 15px;
-            align-items: flex-end;
-        }
-
-        .input-row .input-group {
-            flex: 1;
-        }
-
-        @media (max-width: 1024px) {
-            .content {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CYK Algorithm Visualization</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/interactive.css">
+  <script src="mobile-detection.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1 class="main-title">CYK Algorithm Demonstration</h1>
-        
-        <div class="content">
-            <!-- Sidebar: Configuration -->
-            <div class="sidebar">
-                <h2 class="section-title">Setup</h2>
-                
-                <div class="input-group">
-                    <label for="exampleSelect">Quick Start:</label>
-                    <select id="exampleSelect" onchange="loadSelectedExample()">
-                        <option value="">-- Choose an example --</option>
-                        <option value="1">Simple Grammar (a*b*)</option>
-                        <option value="2">Arithmetic Expressions</option>
-                        <option value="3">Palindromes</option>
-                        <option value="4">Balanced Parentheses</option>
-                        <option value="5">Equal a's and b's</option>
-                        <option value="6">Nested Structures</option>
-                    </select>
-                </div>
-
-                <div class="cnf-note">
-                    <strong>CNF Format:</strong> Use "A -> BC | DE | a"
-                </div>
-                
-                <div class="input-group">
-                    <label for="alphabet">Alphabet:</label>
-                    <input type="text" id="alphabet" placeholder="a b c" value="a b">
-                    <div class="alphabet-display" id="alphabetDisplay">Terminals: {a, b}</div>
-                </div>
-
-                <div class="input-group">
-                    <label for="grammar">Grammar Rules:</label>
-                    <textarea id="grammar" rows="6">S -> AB | AS
-A -> a
-B -> b</textarea>
-                </div>
-                
-                <div class="input-row">
-                    <div class="input-group">
-                        <label for="inputString">Input String:</label>
-                        <input type="text" id="inputString" value="aab">
-                    </div>
-                    <div class="input-group">
-                        <label for="startSymbol">Start Symbol:</label>
-                        <input type="text" id="startSymbol" value="S">
-                    </div>
-                </div>
-                
-                <div class="controls">
-                    <button onclick="initializeCYK()">Initialize</button>
-                    <button id="stepBtn" onclick="step()" disabled>Next Step</button>
-                    <button id="runAllBtn" onclick="runAll()" disabled>Run All</button>
-                    <button onclick="reset()">Reset</button>
-                </div>
-
-                <div id="rulesDisplay" class="rules-display" style="display: none;"></div>
-            </div>
-
-            <!-- Main Area: Algorithm Visualization -->
-            <div class="main-area">
-                <div id="stepInfo" class="step-info" style="display: none;">
-                    <h3>Current Step</h3>
-                    <p id="stepDescription"></p>
-                </div>
-                
-                <div id="tableContainer" class="table-container" style="display: none;">
-                    <div class="table-title">CYK Parsing Table</div>
-                    <table id="cykTable" class="cyk-table"></table>
-                </div>
-                
-                <div id="result" class="result" style="display: none;"></div>
-            </div>
+  <div class="container">
+    <!-- Quick Guide Section -->
+    <div class="guide-container">
+      <div class="guide-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 8v4M12 16h.01"></path>
+        </svg>
+        <h2>Quick Guide</h2>
+      </div>
+      <div class="guide-steps">
+        <div class="guide-step">
+          <div class="step-number purple">1</div>
+          <div class="step-text">Select a CNF Grammar</div>
         </div>
+        <div class="guide-step">
+          <div class="step-number blue">2</div>
+          <div class="step-text">Choose an input string</div>
+        </div>
+        <div class="guide-step">
+          <div class="step-number green">3</div>
+          <div class="step-text">Step through CYK algorithm</div>
+        </div>
+        <div class="guide-step">
+          <div class="step-number red">4</div>
+          <div class="step-text">View CYK table completion</div>
+        </div>
+      </div>
     </div>
 
-    <script>
-        let grammar = {};
-        let terminalRules = {};
-        let nonTerminalRules = {};
-        let alphabet = new Set();
-        let inputString = '';
-        let n = 0;
-        let table = [];
-        let currentStep = 0;
-        let totalSteps = 0;
-        let steps = [];
-        let startSymbol = 'S';
+    <!-- Main Content Panels -->
+    <div class="main-panels">
+      <!-- Main Experiment Area -->
+      <div class="panel experiment-panel">
+        <!-- Controls (horizontal at the top) -->
+        <div class="controls-container">
+          <div class="controls-title">Controls:</div>
+          <div class="horizontal-controls">
+            <button id="change_grammar" class="button purple">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
+              </svg>
+              Change Grammar
+            </button>
+            <button id="change_input" class="button blue">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Change Input
+            </button>
+            <button id="auto_step" class="button green">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.07a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              Auto Step
+            </button>
+            <button id="previous_step" class="button orange">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              Previous Step
+            </button>
+            <button id="show_hint" class="button blue">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 8v4M12 16h.01"></path>
+              </svg>
+              Show Hint
+            </button>
+            <button id="reset_algorithm" class="button red">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+              </svg>
+              Reset
+            </button>
+          </div>
+        </div>
 
-        // Update alphabet display when alphabet input changes
-        document.getElementById('alphabet').addEventListener('input', updateAlphabetDisplay);
+        <!-- Current Grammar Description -->
+        <div class="shared-input-container">
+          <div class="input-string-label">Current Grammar:</div>
+          <div id="CNF_description_container">
+            <div class="input-string">CNF Grammar 1</div>
+          </div>
+        </div>
 
-        function updateAlphabetDisplay() {
-            const alphabetInput = document.getElementById('alphabet').value.trim();
-            const alphabetDisplay = document.getElementById('alphabetDisplay');
-            
-            if (alphabetInput) {
-                const terminals = alphabetInput.split(/\s+/).filter(t => t.length > 0);
-                alphabetDisplay.textContent = `Terminals: {${terminals.join(', ')}}`;
-                alphabet = new Set(terminals);
-            } else {
-                alphabetDisplay.textContent = 'Terminals: {}';
-                alphabet = new Set();
-            }
-        }
+        <!-- Input String Display -->
+        <div class="shared-input-container">
+          <div class="input-string-label">Input String:</div>
+          <div id="input_container">
+            <div class="input-string">aabbab</div>
+          </div>
+        </div>
 
-        function parseGrammar(grammarText) {
-            const rules = grammarText.trim().split('\n');
-            grammar = {};
-            terminalRules = {};
-            nonTerminalRules = {};
-            
-            rules.forEach(rule => {
-                const parts = rule.split('->').map(p => p.trim());
-                if (parts.length !== 2) return;
-                
-                const left = parts[0];
-                const rightSide = parts[1];
-                
-                // Split by | to handle multiple productions
-                const productions = rightSide.split('|').map(p => p.trim());
-                
-                if (!grammar[left]) grammar[left] = [];
-                grammar[left].push(...productions);
-                
-                productions.forEach(production => {
-                    if (production.length === 1 && alphabet.has(production)) {
-                        // Terminal rule
-                        if (!terminalRules[production]) terminalRules[production] = [];
-                        terminalRules[production].push(left);
-                    } else if (production.length === 2 && production.match(/^[A-Z][A-Z]$/)) {
-                        // Non-terminal rule
-                        if (!nonTerminalRules[left]) nonTerminalRules[left] = [];
-                        nonTerminalRules[left].push(production);
-                    }
-                });
-            });
-        }
+        <!-- CYK Table Container -->
+        <div class="cyk-table-container">
+          <div class="cyk-table-title">CYK Table</div>
+          <div class="cyk-table-wrapper">
+            <svg id="cyk_table_svg" width="100%" height="400" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
+              <!-- SVG will be populated by JavaScript - showing the CYK table -->
+            </svg>
+          </div>
+        </div>
+      </div>
 
-        function displayRules() {
-            const rulesDiv = document.getElementById('rulesDisplay');
-            let rulesText = 'Grammar Rules:\n\nTerminal Productions:\n';
-            
-            for (let terminal in terminalRules) {
-                rulesText += `${terminal} → ${terminalRules[terminal].join(', ')}\n`;
-            }
-            
-            rulesText += '\nNon-terminal Productions:\n';
-            for (let nonTerminal in nonTerminalRules) {
-                rulesText += `${nonTerminal} → ${nonTerminalRules[nonTerminal].join(' | ')}\n`;
-            }
-            
-            rulesDiv.textContent = rulesText;
-            rulesDiv.style.display = 'block';
-        }
+      <!-- Right Interactive Panel -->
+      <div class="panel steps-panel steps-panel-right">
+        <!-- Grammar Rules Section -->
+        <div class="right-panel-grammar-rules">
+          <h4 class="grammar-rules-title">Grammar Rules</h4>
+          <div id="CNF_transition_container" class="grammar-rules-display">
+            <!-- Will be populated by JavaScript -->
+          </div>
+        </div>
+        
+        <!-- Interactive Question Container -->
+        <div id="interactive_question_container" class="interactive-controls" style="display: none;">
+          <div class="current-step-info">
+            <div class="current-string">What should go in this cell?</div>
+            <div class="direction-text">Choose the correct non-terminals:</div>
+            <div class="instruction-text" id="cell_question_text">
+              Fill cell (1, 1) for substring "a"
+            </div>
+          </div>
+          <div class="rule-selection-container">
+            <div class="rule-buttons-container" id="symbol_choices">
+              <!-- Will be populated with symbol choices -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- Default instructions when no question is active -->
+        <div id="default_instructions" class="step-info">
+          <h3>How to Play</h3>
+          <div id="interactive_instructions">
+            <p>🎯 <strong>Goal:</strong> Fill the CYK table correctly!</p>
+            <br>
+            <p>📝 <strong>Steps:</strong></p>
+            <p>1. Look at the highlighted cell</p>
+            <p>2. Choose what non-terminals can generate the substring</p>
+            <p>3. Get feedback on your choice</p>
+            <p>4. Continue until the table is complete</p>
+            <br>
+            <p>💡 <strong>Tips:</strong></p>
+            <p>• For single characters, find rules like A → a</p>
+            <p>• For longer substrings, combine smaller parts</p>
+            <p>• Use "Show Hint" if you're stuck</p>
+            <p>• Use "Auto Step" to see the correct answer</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        function initializeCYK() {
-            const grammarText = document.getElementById('grammar').value;
-            inputString = document.getElementById('inputString').value.trim();
-            startSymbol = document.getElementById('startSymbol').value.trim() || 'S';
-            updateAlphabetDisplay();
-            
-            if (!grammarText || !inputString) {
-                alert('Please enter both grammar rules and input string');
-                return;
-            }
-
-            // Validate input string against alphabet
-            for (let char of inputString) {
-                if (!alphabet.has(char)) {
-                    alert(`Character '${char}' is not in the specified alphabet`);
-                    return;
-                }
-            }
-            
-            parseGrammar(grammarText);
-            displayRules();
-            
-            n = inputString.length;
-            table = Array(n).fill().map(() => Array(n).fill().map(() => new Set()));
-            
-            createTable();
-            generateSteps();
-            
-            currentStep = 0;
-            document.getElementById('stepBtn').disabled = false;
-            document.getElementById('runAllBtn').disabled = false;
-            document.getElementById('tableContainer').style.display = 'block';
-            document.getElementById('result').style.display = 'none';
-            
-            updateStepInfo();
-        }
-
-        function createTable() {
-            const tableElement = document.getElementById('cykTable');
-            tableElement.innerHTML = '';
-            
-            // Create header row with input string
-            const headerRow = tableElement.insertRow();
-            headerRow.insertCell(); // Empty cell for row labels
-            for (let i = 0; i < n; i++) {
-                const cell = headerRow.insertCell();
-                cell.textContent = inputString[i];
-                cell.style.background = '#3498db';
-                cell.style.color = 'white';
-                cell.style.fontWeight = '600';
-            }
-            
-            // Create table rows
-            for (let length = 1; length <= n; length++) {
-                const row = tableElement.insertRow();
-                
-                // Row label
-                const labelCell = row.insertCell();
-                labelCell.textContent = length;
-                labelCell.style.background = '#3498db';
-                labelCell.style.color = 'white';
-                labelCell.style.fontWeight = '600';
-                
-                for (let i = 0; i <= n - length; i++) {
-                    const cell = row.insertCell();
-                    cell.id = `cell-${length-1}-${i}`;
-                    cell.innerHTML = `<span class="coordinates">(${length},${i+1})</span>`;
-                    
-                    if (length === 1) {
-                        cell.classList.add('diagonal');
-                    }
-                }
-                
-                // Fill empty cells for triangular shape
-                for (let i = n - length + 1; i < n; i++) {
-                    row.insertCell().style.display = 'none';
-                }
-            }
-        }
-
-        function generateSteps() {
-            steps = [];
-            
-            // Step 1: Fill diagonal (length 1)
-            for (let i = 0; i < n; i++) {
-                const char = inputString[i];
-                steps.push({
-                    type: 'diagonal',
-                    i: i,
-                    j: 0,
-                    char: char,
-                    description: `Filling cell (1,${i+1}) for terminal '${char}'`
-                });
-            }
-            
-            // Steps 2+: Fill remaining cells
-            for (let length = 2; length <= n; length++) {
-                for (let i = 0; i <= n - length; i++) {
-                    steps.push({
-                        type: 'fill',
-                        i: i,
-                        j: length - 1,
-                        length: length,
-                        description: `Filling cell (${length},${i+1}) - substring "${inputString.substring(i, i + length)}"`
-                    });
-                }
-            }
-            
-            totalSteps = steps.length;
-        }
-
-        function step() {
-            if (currentStep >= totalSteps) {
-                showResult();
-                return;
-            }
-            
-            const stepData = steps[currentStep];
-            
-            // Clear previous highlighting
-            document.querySelectorAll('.cyk-table td').forEach(cell => {
-                cell.classList.remove('current');
-            });
-            
-            if (stepData.type === 'diagonal') {
-                fillDiagonalCell(stepData.i, stepData.char);
-            } else if (stepData.type === 'fill') {
-                fillCell(stepData.i, stepData.j, stepData.length);
-            }
-            
-            // Highlight current cell
-            const cell = document.getElementById(`cell-${stepData.j}-${stepData.i}`);
-            if (cell) {
-                cell.classList.add('current');
-            }
-            
-            currentStep++;
-            updateStepInfo();
-            
-            if (currentStep >= totalSteps) {
-                document.getElementById('stepBtn').disabled = true;
-                showResult();
-            }
-        }
-
-        function fillDiagonalCell(i, char) {
-            if (terminalRules[char]) {
-                terminalRules[char].forEach(nt => {
-                    table[0][i].add(nt);
-                });
-            }
-            updateCellDisplay(0, i);
-        }
-
-        function fillCell(i, j, length) {
-            const newNonTerminals = new Set();
-            
-            // Try all possible splits
-            for (let k = 1; k < length; k++) {
-                const leftSet = table[k-1][i];
-                const rightSet = table[length-k-1][i+k];
-                
-                // Check all combinations
-                leftSet.forEach(leftNT => {
-                    rightSet.forEach(rightNT => {
-                        const combination = leftNT + rightNT;
-                        
-                        // Check if any rule produces this combination
-                        for (let nt in nonTerminalRules) {
-                            if (nonTerminalRules[nt].includes(combination)) {
-                                newNonTerminals.add(nt);
-                            }
-                        }
-                    });
-                });
-            }
-            
-            newNonTerminals.forEach(nt => table[j][i].add(nt));
-            updateCellDisplay(j, i);
-        }
-
-        function updateCellDisplay(j, i) {
-            const cell = document.getElementById(`cell-${j}-${i}`);
-            if (cell) {
-                const cellContent = Array.from(table[j][i]).join(',');
-                const coordinates = cell.querySelector('.coordinates');
-                cell.innerHTML = '';
-                cell.appendChild(coordinates);
-                
-                if (cellContent) {
-                    const contentSpan = document.createElement('div');
-                    contentSpan.textContent = cellContent;
-                    contentSpan.style.fontSize = '12px';
-                    contentSpan.style.marginTop = '15px';
-                    contentSpan.style.fontWeight = '500';
-                    cell.appendChild(contentSpan);
-                    cell.classList.add('filled');
-                } else {
-                    cell.classList.add('empty');
-                    const emptySpan = document.createElement('div');
-                    emptySpan.textContent = '∅';
-                    emptySpan.style.fontSize = '16px';
-                    emptySpan.style.marginTop = '15px';
-                    emptySpan.style.color = '#bdc3c7';
-                    cell.appendChild(emptySpan);
-                }
-            }
-        }
-
-        function updateStepInfo() {
-            const stepInfo = document.getElementById('stepInfo');
-            const stepDesc = document.getElementById('stepDescription');
-            
-            if (currentStep < totalSteps) {
-                const stepData = steps[currentStep];
-                stepDesc.textContent = `Step ${currentStep + 1}/${totalSteps}: ${stepData.description}`;
-                stepInfo.style.display = 'block';
-            } else {
-                stepInfo.style.display = 'none';
-            }
-        }
-
-        function runAll() {
-            while (currentStep < totalSteps) {
-                step();
-            }
-        }
-
-        function showResult() {
-            const resultDiv = document.getElementById('result');
-            const accepted = table[n-1][0].has(startSymbol);
-            
-            if (accepted) {
-                resultDiv.textContent = `✓ String "${inputString}" is ACCEPTED by the grammar`;
-                resultDiv.className = 'result accepted';
-            } else {
-                resultDiv.textContent = `✗ String "${inputString}" is REJECTED by the grammar`;
-                resultDiv.className = 'result rejected';
-            }
-            
-            resultDiv.style.display = 'block';
-        }
-
-        function reset() {
-            document.getElementById('stepBtn').disabled = true;
-            document.getElementById('runAllBtn').disabled = true;
-            document.getElementById('tableContainer').style.display = 'none';
-            document.getElementById('stepInfo').style.display = 'none';
-            document.getElementById('result').style.display = 'none';
-            document.getElementById('rulesDisplay').style.display = 'none';
-            currentStep = 0;
-        }
-
-        function loadSelectedExample() {
-            const select = document.getElementById('exampleSelect');
-            const value = select.value;
-            
-            if (value) {
-                switch(value) {
-                    case '1': loadExample1(); break;
-                    case '2': loadExample2(); break;
-                    case '3': loadExample3(); break;
-                    case '4': loadExample4(); break;
-                    case '5': loadExample5(); break;
-                    case '6': loadExample6(); break;
-                }
-            }
-        }
-
-        function loadExample1() {
-            document.getElementById('alphabet').value = 'a b';
-            document.getElementById('grammar').value = `S -> AB | AS
-A -> a
-B -> b`;
-            document.getElementById('inputString').value = 'aab';
-            document.getElementById('startSymbol').value = 'S';
-            updateAlphabetDisplay();
-        }
-
-        function loadExample2() {
-            document.getElementById('alphabet').value = 'n m f p';
-            document.getElementById('grammar').value = `E -> ET | TF
-T -> TM | FM
-F -> FP | PF
-P -> EP | n
-M -> m
-F -> f
-P -> p`;
-            document.getElementById('inputString').value = 'nmf';
-            document.getElementById('startSymbol').value = 'E';
-            updateAlphabetDisplay();
-        }
-
-        function loadExample3() {
-            document.getElementById('alphabet').value = 'a b c';
-            document.getElementById('grammar').value = `S -> AB | BA | AC | CA | BC | CB | AA | BB | CC
-A -> SA | a
-B -> SB | b
-C -> SC | c`;
-            document.getElementById('inputString').value = 'abcba';
-            document.getElementById('startSymbol').value = 'S';
-            updateAlphabetDisplay();
-        }
-
-        function loadExample4() {
-            document.getElementById('alphabet').value = 'l r';
-            document.getElementById('grammar').value = `S -> SS | LR | LT
-T -> SR
-L -> l
-R -> r`;
-            document.getElementById('inputString').value = 'llrr';
-            document.getElementById('startSymbol').value = 'S';
-            updateAlphabetDisplay();
-        }
-
-        function loadExample5() {
-            document.getElementById('alphabet').value = 'a b';
-            document.getElementById('grammar').value = `S -> AB | BA | AC | CA
-A -> SA | a
-B -> SB | b
-C -> AB | BA`;
-            document.getElementById('inputString').value = 'aabb';
-            document.getElementById('startSymbol').value = 'S';
-            updateAlphabetDisplay();
-        }
-
-        function loadExample6() {
-            document.getElementById('alphabet').value = 'l r a b';
-            document.getElementById('grammar').value = `S -> LR | LS | SR | AB
-L -> LP | l
-R -> RP | r
-P -> AB
-A -> a
-B -> b`;
-            document.getElementById('inputString').value = 'labrb';
-            document.getElementById('startSymbol').value = 'S';
-            updateAlphabetDisplay();
-        }
-
-        // Initialize alphabet display on page load
-        updateAlphabetDisplay();
-    </script>
+  <!-- External Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <script src="js/data_interactive.js"></script>
+  <script src="js/helper.js"></script>
+  <script src="js/main_interactive.js"></script>
 </body>
 </html>
