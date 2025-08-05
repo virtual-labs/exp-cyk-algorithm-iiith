@@ -1,10 +1,3 @@
-### Prerequisites
-
-Before starting the experiment, ensure you have:
-1. A modern web browser (Chrome, Firefox, or Safari)
-2. Basic understanding of context-free grammars
-3. Knowledge of Chomsky Normal Form
-
 ### Steps to Perform the Experiment
 
 #### 1. Starting the Experiment
