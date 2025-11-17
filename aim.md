@@ -1,0 +1,3 @@
+
+
+This experiment introduces students to the Cocke-Younger-Kasami (CYK) algorithm, a dynamic programming approach for parsing context-free grammars in Chomsky Normal Form. Students will explore how the algorithm systematically builds a parsing table to determine whether a given string belongs to the language defined by a grammar. The interactive simulation allows students to trace through each step of the table construction process, observing how substrings are analyzed and combined according to grammar rules. By working with different grammars and input strings, students develop an understanding of bottom-up parsing strategies and gain practical experience with one of the fundamental algorithms in formal language theory and compiler design. 

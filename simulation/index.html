@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CYK Algorithm Visualization</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/interactive.css">
+  <script src="mobile-detection.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Quick Guide Section -->
+    <div class="guide-container">
+      <div class="guide-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 8v4M12 16h.01"></path>
+        </svg>
+        <h2>Quick Guide</h2>
+      </div>
+      <div class="guide-steps">
+        <div class="guide-step">
+          <div class="step-number purple">1</div>
+          <div class="step-text">Select a CNF Grammar</div>
+        </div>
+        <div class="guide-step">
+          <div class="step-number blue">2</div>
+          <div class="step-text">Choose an input string</div>
+        </div>
+        <div class="guide-step">
+          <div class="step-number green">3</div>
+          <div class="step-text">Step through CYK algorithm</div>
+        </div>
+        <div class="guide-step">
+          <div class="step-number red">4</div>
+          <div class="step-text">View CYK table completion</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Panels -->
+    <div class="main-panels">
+      <!-- Main Experiment Area -->
+      <div class="panel experiment-panel">
+        <!-- Controls (horizontal at the top) -->
+        <div class="controls-container">
+          <div class="controls-title">Controls:</div>
+          <div class="horizontal-controls">
+            <button id="change_grammar" class="button purple">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
+              </svg>
+              Change Grammar
+            </button>
+            <button id="change_input" class="button blue">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Change Input
+            </button>
+            <button id="auto_step" class="button green">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.07a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              Auto Step
+            </button>
+            <button id="previous_step" class="button orange">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              Previous Step
+            </button>
+            <button id="show_hint" class="button blue">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 8v4M12 16h.01"></path>
+              </svg>
+              Show Hint
+            </button>
+            <button id="reset_algorithm" class="button red">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+              </svg>
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Current Grammar Description -->
+        <div class="shared-input-container">
+          <div class="input-string-label">Current Grammar:</div>
+          <div id="CNF_description_container">
+            <div class="input-string">CNF Grammar 1</div>
+          </div>
+        </div>
+
+        <!-- Input String Display -->
+        <div class="shared-input-container">
+          <div class="input-string-label">Input String:</div>
+          <div id="input_container">
+            <div class="input-string">aabbab</div>
+          </div>
+        </div>
+
+        <!-- CYK Table Container -->
+        <div class="cyk-table-container">
+          <div class="cyk-table-title">CYK Table</div>
+          <div class="cyk-table-wrapper">
+            <svg id="cyk_table_svg" width="100%" height="400" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
+              <!-- SVG will be populated by JavaScript - showing the CYK table -->
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Interactive Panel -->
+      <div class="panel steps-panel steps-panel-right">
+        <!-- Grammar Rules Section -->
+        <div class="right-panel-grammar-rules">
+          <h4 class="grammar-rules-title">Grammar Rules</h4>
+          <div id="CNF_transition_container" class="grammar-rules-display">
+            <!-- Will be populated by JavaScript -->
+          </div>
+        </div>
+        
+        <!-- Interactive Question Container -->
+        <div id="interactive_question_container" class="interactive-controls" style="display: none;">
+          <div class="current-step-info">
+            <div class="current-string">What should go in this cell?</div>
+            <div class="direction-text">Choose the correct non-terminals:</div>
+            <div class="instruction-text" id="cell_question_text">
+              Fill cell (1, 1) for substring "a"
+            </div>
+          </div>
+          <div class="rule-selection-container">
+            <div class="rule-buttons-container" id="symbol_choices">
+              <!-- Will be populated with symbol choices -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- Default instructions when no question is active -->
+        <div id="default_instructions" class="step-info">
+          <h3>How to Play</h3>
+          <div id="interactive_instructions">
+            <p>🎯 <strong>Goal:</strong> Fill the CYK table correctly!</p>
+            <br>
+            <p>📝 <strong>Steps:</strong></p>
+            <p>1. Look at the highlighted cell</p>
+            <p>2. Choose what non-terminals can generate the substring</p>
+            <p>3. Get feedback on your choice</p>
+            <p>4. Continue until the table is complete</p>
+            <br>
+            <p>💡 <strong>Tips:</strong></p>
+            <p>• For single characters, find rules like A → a</p>
+            <p>• For longer substrings, combine smaller parts</p>
+            <p>• Use "Show Hint" if you're stuck</p>
+            <p>• Use "Auto Step" to see the correct answer</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- External Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <script src="js/data_interactive.js"></script>
+  <script src="js/helper.js"></script>
+  <script src="js/main_interactive.js"></script>
+<script src="../assets/js/iframeResize.js"></script>
+        
+        </body>
+</html>

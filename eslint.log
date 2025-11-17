@@ -1,0 +1,71 @@
+
+/home/runner/work/exp-cyk-algorithm-iiith/exp-cyk-algorithm-iiith/experiment/simulation/js/data.js
+  37:10  error  Parsing error: Unexpected token :
+
+/home/runner/work/exp-cyk-algorithm-iiith/exp-cyk-algorithm-iiith/experiment/simulation/js/data_interactive.js
+   6:7  warning  'cnf1' is assigned a value but never used  no-unused-vars
+  18:7  warning  'cnf2' is assigned a value but never used  no-unused-vars
+  28:7  warning  'cnf3' is assigned a value but never used  no-unused-vars
+
+/home/runner/work/exp-cyk-algorithm-iiith/exp-cyk-algorithm-iiith/experiment/simulation/js/helper.js
+   16:10  warning  'newElement' is defined but never used       no-unused-vars
+   33:10  warning  'displayCYKTable' is defined but never used  no-unused-vars
+  152:10  warning  'getTotalSteps' is defined but never used    no-unused-vars
+  157:10  warning  'getStepInfo' is defined but never used      no-unused-vars
+
+/home/runner/work/exp-cyk-algorithm-iiith/exp-cyk-algorithm-iiith/experiment/simulation/js/main.js
+   32:17  warning  'cnfGrammars' is not defined      no-undef
+   36:16  warning  'getTotalSteps' is not defined    no-undef
+   63:17  warning  'cnfGrammars' is not defined      no-undef
+   65:5   warning  'clearElem' is not defined        no-undef
+   67:25  warning  'newElement' is not defined       no-undef
+   74:17  warning  'cnfGrammars' is not defined      no-undef
+   77:5   warning  'clearElem' is not defined        no-undef
+   79:25  warning  'newElement' is not defined       no-undef
+   86:17  warning  'cnfGrammars' is not defined      no-undef
+   88:5   warning  'clearElem' is not defined        no-undef
+   94:25  warning  'newElement' is not defined       no-undef
+  105:17  warning  'cnfGrammars' is not defined      no-undef
+  108:5   warning  'displayCYKTable' is not defined  no-undef
+  113:17  warning  'cnfGrammars' is not defined      no-undef
+  114:22  warning  'getStepInfo' is not defined      no-undef
+  201:47  warning  'cnfGrammars' is not defined      no-undef
+  207:5   warning  'swal' is not defined             no-undef
+  209:28  warning  'cnfGrammars' is not defined      no-undef
+  217:17  warning  'cnfGrammars' is not defined      no-undef
+  223:5   warning  'swal' is not defined             no-undef
+  239:30  warning  'getStepInfo' is not defined      no-undef
+  239:42  warning  'cnfGrammars' is not defined      no-undef
+  245:25  warning  'cnfGrammars' is not defined      no-undef
+  251:17  warning  'swal' is not defined             no-undef
+  273:17  warning  'cnfGrammars' is not defined      no-undef
+  274:22  warning  'getStepInfo' is not defined      no-undef
+  301:5   warning  'swal' is not defined             no-undef
+
+/home/runner/work/exp-cyk-algorithm-iiith/exp-cyk-algorithm-iiith/experiment/simulation/js/main_interactive.js
+    2:22  warning  'cnf1' is not defined                                 no-undef
+    5:5   warning  'totalSteps' is assigned a value but never used       no-unused-vars
+    7:5   warning  'interactiveMode' is assigned a value but never used  no-unused-vars
+   49:28  warning  'cnf1' is not defined                                 no-undef
+   50:26  warning  'cnf2' is not defined                                 no-undef
+   51:35  warning  'cnf2' is not defined                                 no-undef
+   52:26  warning  'cnf3' is not defined                                 no-undef
+   54:26  warning  'cnf1' is not defined                                 no-undef
+  152:5   warning  'displayCYKTable' is not defined                      no-undef
+  193:11  warning  'substring' is assigned a value but never used        no-unused-vars
+  291:17  warning  'displayCYKTable' is not defined                      no-undef
+  308:5   warning  'Swal' is not defined                                 no-undef
+  318:5   warning  'Swal' is not defined                                 no-undef
+  364:5   warning  'displayCYKTable' is not defined                      no-undef
+  384:5   warning  'Swal' is not defined                                 no-undef
+  421:5   warning  'Swal' is not defined                                 no-undef
+  484:9   warning  'Swal' is not defined                                 no-undef
+  499:5   warning  'displayCYKTable' is not defined                      no-undef
+
+/home/runner/work/exp-cyk-algorithm-iiith/exp-cyk-algorithm-iiith/experiment/simulation/mobile-detection.js
+  393:7   warning  'mobileDetection' is assigned a value but never used  no-unused-vars
+  396:38  warning  'module' is not defined                               no-undef
+  397:3   warning  'module' is not defined                               no-undef
+
+✖ 56 problems (1 error, 55 warnings)
+
